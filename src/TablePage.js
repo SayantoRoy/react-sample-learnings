@@ -137,7 +137,7 @@ const TablePage = () => {
   const [filterModalSearch, setFilterModalSearch] = useState("");
   const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
   const [fill, setFill] = useState("");
-  const [colValue , setColValue] = useState("");
+  const [colValue, setColValue] = useState("");
 
   const showModal = () => {
     setIsFilterModalVisible(true);
@@ -149,7 +149,9 @@ const TablePage = () => {
     let col = "docNo";
 
     const filteredTable = dataSource.filter((o) =>
-      String(o[colValue]).toLowerCase().includes(filterModalSearch.toLowerCase())
+      String(o[colValue])
+        .toLowerCase()
+        .includes(filterModalSearch.toLowerCase())
     );
     if (filterModalSearch.length > 0) {
       setFill(filterModalSearch);
@@ -162,15 +164,28 @@ const TablePage = () => {
   };
 
   const handleChange = (e) => {
-     setColValue(e)
+    setColValue(e);
   };
 
   const clearFilters = () => {
     //setFill('');
-    setFilterModalSearch('');
-    setColValue('');
+    setFilterModalSearch("");
+    setColValue("");
   };
 
+  // All the Code for the Create Request
+  const [isCreateVisible, setIsCreateVisible] = useState(false);
+  const handleCreateCancel = () => {
+    setIsCreateVisible(false);
+  };
+
+  const handleCreateDone = () => {
+    setIsCreateVisible(false);
+  };
+
+  const openCreateModal = () => {
+    setIsCreateVisible(true);
+  };
 
   return (
     <div style={{ margin: "50px" }}>
@@ -183,8 +198,12 @@ const TablePage = () => {
         <Button type="text" onClick={showModal}>
           Filter
         </Button>
-      </Row>
 
+        <Button type="primary" onClick={openCreateModal}>
+          Create
+        </Button>
+      </Row>
+      {/* Filter Modal component to be made */}
       <Modal
         title="Basic Modal"
         visible={isFilterModalVisible}
@@ -193,15 +212,13 @@ const TablePage = () => {
         style={{ top: 20 }}
         footer={[
           <Button key="back" onClick={handleCancel}>
-          Cancel
-        </Button>,
-        <Button onClick={clearFilters}>
-          Clear Filters
+            Cancel
           </Button>,
-        <Button key="submit" type="primary"  onClick={handleDone}>
-        Ok
-      </Button>
-      ]}
+          <Button onClick={clearFilters}>Clear Filters</Button>,
+          <Button key="submit" type="primary" onClick={handleDone}>
+            Ok
+          </Button>,
+        ]}
       >
         <Row>
           {/* <Col span={24}>
@@ -218,7 +235,7 @@ const TablePage = () => {
               <Col span={11}>
                 <Select
                   defaultValue=""
-                  style={{ width: '100%' }}
+                  style={{ width: "100%" }}
                   onChange={handleChange}
                 >
                   <Option value="docNo">Doc No</Option>
@@ -234,6 +251,84 @@ const TablePage = () => {
                   //style={{ width: "60%" }}
                 />
               </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Modal>
+
+      {/* Modal For Creating a Serive New */}
+      <Modal
+        title="Create New Request"
+        visible={isCreateVisible}
+        closable={false}
+        footer={false}
+        style={{ minWidth: "90%", minHeight: "80%" }}
+      >
+        <Row className="h-full">
+          <Col className="flex flex-col h-full" style={{ width: "100%" }}>
+            <Row gutter={22}>
+              <Col span={2}>
+                <span>Doc No</span>
+              </Col>
+              <Col span={4}>
+                <Input
+                  placeholder="Search"
+                  onChange={() => console.log(e.target.value)}
+                  style={{ width: "100%" }}
+                />
+              </Col>
+              <Col span={2} offset={2}>
+                Module
+              </Col>
+              <Col span={4}>
+                <Select defaultValue="" style={{ width: "100%" }}>
+                  <Option value="accounts">Accounts</Option>
+                  <Option value="inventory">Inventory</Option>
+                  <Option value="logistics">Logistics</Option>
+                  <Option value="orderManagement">Order management</Option>
+                  <Option value="packing">Packing</Option>
+                </Select>
+              </Col>
+              <Col span={2} offset={2}>
+                Severity
+              </Col>
+              <Col span={4}>
+                <Select defaultValue="" style={{ width: "100%" }}>
+                  <Option value="high">High</Option>
+                  <Option value="moderate">Moderate</Option>
+                  <Option value="low">Low</Option>
+                </Select>
+              </Col>
+            </Row>
+            <Row gutter={22} style={{ marginTop: "2%" }}>
+              <Col span={2}>
+                <span>Assigned To</span>
+              </Col>
+              <Col span={4}>
+                <Input
+                  placeholder="Search"
+                  onChange={() => console.log(e.target.value)}
+                  style={{ width: "100%" }}
+                />
+              </Col>
+              <Col span={2} offset={2}>
+                <span>Assigned By</span>
+              </Col>
+              <Col span={4}>
+                <Input
+                  placeholder="Search"
+                  onChange={() => console.log(e.target.value)}
+                  style={{ width: "100%" }}
+                />
+              </Col>
+            </Row>
+            <Row style={{ marginTop: "2%" }}>
+              <Button key="back" onClick={handleCreateCancel}>
+                Go back
+              </Button>
+              <Button type="primary" onClick={handleCreateDone}>
+                Save
+              </Button>
             </Row>
           </Col>
         </Row>
